@@ -31,7 +31,7 @@ public class DataBaseConnector extends SQLiteOpenHelper {
 
     public DataBaseConnector(Context context) {
         super(context, "db_150341R", null, DATABASE_VERSION);
-        Toast.makeText(context, "Database created", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Database created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
