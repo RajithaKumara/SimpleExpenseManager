@@ -16,10 +16,13 @@
 
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.data.impl;
 
+import android.content.Context;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.DataBaseConnector;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.TransactionDAO;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.ExpenseType;
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
@@ -29,21 +32,31 @@ import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
  * transaction logs are stored in a LinkedList in memory.
  */
 public class InMemoryTransactionDAO implements TransactionDAO {
-    private final List<Transaction> transactions;
+    private List<Transaction> transactions;
+    //
+    private DataBaseConnector dataBaseConnector;
 
-    public InMemoryTransactionDAO() {
+    public InMemoryTransactionDAO(Context context) {
         transactions = new LinkedList<>();
+        //
+        dataBaseConnector=new DataBaseConnector(context);
+        transactions=dataBaseConnector.getTransactionDetail();
     }
 
     @Override
     public void logTransaction(Date date, String accountNo, ExpenseType expenseType, double amount) {
         Transaction transaction = new Transaction(date, accountNo, expenseType, amount);
         transactions.add(transaction);
+        //
+        dataBaseConnector.insertTransaction(transaction);
     }
 
     @Override
     public List<Transaction> getAllTransactionLogs() {
+        transactions=dataBaseConnector.getTransactionDetail();
         return transactions;
+        //
+//        return dataBaseConnector.getTransactionDetail();
     }
 
     @Override
